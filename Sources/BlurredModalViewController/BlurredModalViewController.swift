@@ -34,7 +34,7 @@ public class BlurredModalViewController: UIViewController, UIAdaptivePresentatio
         self.blur()
     }
     
-    func setViewControllerToDisplay(_ viewController: UIViewController){
+    public func setViewControllerToDisplay(_ viewController: UIViewController){
         vcToDisplay = viewController
     }
     
