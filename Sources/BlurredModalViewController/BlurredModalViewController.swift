@@ -1,18 +1,15 @@
 import UIKit
 
 public class BlurredModalViewController: UIViewController, UIAdaptivePresentationControllerDelegate {
-    
-    
     private var blurView: UIVisualEffectView!
     private var vcToDisplay: UIViewController?
-    var style: UIBlurEffect.Style = .dark
-    var constraints: [NSLayoutConstraint]?
-    var delay: TimeInterval = 0
-    var duration: TimeInterval = 0.5
-    var options : UIView.AnimationOptions =  [.allowUserInteraction]
+    public var style: UIBlurEffect.Style = .dark
+    public var constraints: [NSLayoutConstraint]?
+    public var delay: TimeInterval = 0
+    public var duration: TimeInterval = 0.5
+    public var options : UIView.AnimationOptions =  [.allowUserInteraction]
         
     public override func viewDidLoad() {
-        
         super.viewDidLoad()
         view.backgroundColor = .clear
         let blurEffect = UIBlurEffect(style: style)
@@ -36,6 +33,7 @@ public class BlurredModalViewController: UIViewController, UIAdaptivePresentatio
     
     public func setViewControllerToDisplay(_ viewController: UIViewController){
         vcToDisplay = viewController
+        vcToDisplay?.presentationController?.delegate = self
     }
     
     func blur(alpha: CGFloat = 1, dismiss: Bool = false){
