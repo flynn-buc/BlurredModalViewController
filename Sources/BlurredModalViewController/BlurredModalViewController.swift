@@ -1,6 +1,6 @@
 import UIKit
 
-public class BlurredVC: UIViewController, UIAdaptivePresentationControllerDelegate {
+public class BlurredModalViewController: UIViewController, UIAdaptivePresentationControllerDelegate {
     
     
     private var blurView: UIVisualEffectView!
@@ -11,7 +11,7 @@ public class BlurredVC: UIViewController, UIAdaptivePresentationControllerDelega
     var duration: TimeInterval = 0.5
     var options : UIView.AnimationOptions =  [.allowUserInteraction]
         
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         
         super.viewDidLoad()
         view.backgroundColor = .clear
@@ -27,7 +27,7 @@ public class BlurredVC: UIViewController, UIAdaptivePresentationControllerDelega
         self.view.alpha = 0
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    public override func viewWillAppear(_ animated: Bool) {
         if let vcToDisplay = vcToDisplay{
             self.present(vcToDisplay, animated: true, completion: nil)
         }
@@ -47,7 +47,7 @@ public class BlurredVC: UIViewController, UIAdaptivePresentationControllerDelega
         }
     }
     
-    func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
+    public func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
         blur(alpha: 0, dismiss: true)
         return true;
     }
