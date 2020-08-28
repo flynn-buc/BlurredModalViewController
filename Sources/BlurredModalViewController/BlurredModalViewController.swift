@@ -1,6 +1,6 @@
 import UIKit
 
-class BlurredVC: UIViewController, UIAdaptivePresentationControllerDelegate {
+public class BlurredVC: UIViewController, UIAdaptivePresentationControllerDelegate {
     
     
     private var blurView: UIVisualEffectView!
