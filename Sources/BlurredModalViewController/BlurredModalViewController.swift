@@ -8,6 +8,8 @@ public class BlurredModalViewController: UIViewController, UIAdaptivePresentatio
     public var delay: TimeInterval = 0
     public var duration: TimeInterval = 0.5
     public var options : UIView.AnimationOptions =  [.allowUserInteraction]
+    public var matchSystemInterface = false
+    public var lightStyle: UIBlurEffect.Style = .light
         
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,6 +49,7 @@ public class BlurredModalViewController: UIViewController, UIAdaptivePresentatio
     
     public func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
         blur(alpha: 0, dismiss: true)
+        vcToDisplay?.dismiss(animated: true, completion: nil)
         return true;
     }
 }
