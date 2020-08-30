@@ -10,6 +10,7 @@ public class BlurredModalViewController: UIViewController, UIAdaptivePresentatio
     public var options : UIView.AnimationOptions =  [.allowUserInteraction]
     private var hasDismissed = false
     private var shouldDismiss = true
+    private var isBlurred = false
     
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,12 +25,14 @@ public class BlurredModalViewController: UIViewController, UIAdaptivePresentatio
         view.insertSubview(blurView, at: 0)
         NSLayoutConstraint.activate(constraints ?? defaultConstraints)
         self.view.alpha = 0
+        self.modalTransitionStyle = .crossDissolve
     }
     
     public override func viewWillAppear(_ animated: Bool) {
         if let vcToDisplay = vcToDisplay{
             self.present(vcToDisplay, animated: true, completion: nil)
         }
+        isBlurred = true
         self.blur()
     }
     
@@ -52,13 +55,13 @@ public class BlurredModalViewController: UIViewController, UIAdaptivePresentatio
         hasDismissed = false
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
             if !self.hasDismissed{
+                self.isBlurred = true
                 self.blur(duration: 0.2)
             }else{
-                self.shouldDismiss = false
             }
         }
         blur(alpha: 0, dismiss: false) { (completed) in
-            
+            self.isBlurred = false
         }
         return true;
     }
@@ -66,7 +69,11 @@ public class BlurredModalViewController: UIViewController, UIAdaptivePresentatio
     public func presentationControllerDidDismiss(_ presentationController: UIPresentationController){
         hasDismissed = true
         if shouldDismiss{
+            if isBlurred{
             dismiss(animated: true, completion: nil)
+            }else{
+                dismiss(animated: false, completion: nil)
+            }
         }
     }
 }
