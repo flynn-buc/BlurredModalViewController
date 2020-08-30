@@ -8,7 +8,9 @@ public class BlurredModalViewController: UIViewController, UIAdaptivePresentatio
     public var delay: TimeInterval = 0
     public var duration: TimeInterval = 0.5
     public var options : UIView.AnimationOptions =  [.allowUserInteraction]
-        
+    private var hasDismissed = false
+    private var shouldDismiss = true
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .clear
@@ -36,9 +38,10 @@ public class BlurredModalViewController: UIViewController, UIAdaptivePresentatio
         vcToDisplay?.presentationController?.delegate = self
     }
     
-    func blur(alpha: CGFloat = 1, dismiss: Bool = false){
+    func blur(alpha: CGFloat = 1, dismiss: Bool = false, duration: TimeInterval? = nil, completion: ((Bool) ->Void)? = nil){
+        let duration = duration ?? self.duration
         DispatchQueue.main.async {
-            UIView.animate(withDuration: self.duration, delay: self.delay, options: self.options, animations: {self.view.alpha = alpha}, completion: nil)
+            UIView.animate(withDuration: duration, delay: self.delay, options: self.options, animations: {self.view.alpha = alpha}, completion: completion)
             if dismiss{
                 self.dismiss(animated: false, completion: nil)
             }
@@ -46,7 +49,24 @@ public class BlurredModalViewController: UIViewController, UIAdaptivePresentatio
     }
     
     public func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
-        blur(alpha: 0, dismiss: true)
+        hasDismissed = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+            if !self.hasDismissed{
+                self.blur(duration: 0.2)
+            }else{
+                self.shouldDismiss = false
+            }
+        }
+        blur(alpha: 0, dismiss: false) { (completed) in
+            
+        }
         return true;
+    }
+    
+    public func presentationControllerDidDismiss(_ presentationController: UIPresentationController){
+        hasDismissed = true
+        if shouldDismiss{
+            dismiss(animated: true, completion: nil)
+        }
     }
 }
