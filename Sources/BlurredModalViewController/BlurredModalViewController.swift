@@ -3,6 +3,7 @@ import UIKit
 public class BlurredModalViewController: UIViewController, UIAdaptivePresentationControllerDelegate {
     private var blurView: UIVisualEffectView!
     private var vcToDisplay: UIViewController?
+    private var scrollingVC: BlurredScrollableModalView?
     public var style: UIBlurEffect.Style = .dark
     public var constraints: [NSLayoutConstraint]?
     public var delay: TimeInterval = 0
@@ -39,6 +40,9 @@ public class BlurredModalViewController: UIViewController, UIAdaptivePresentatio
     public func setViewControllerToDisplay(_ viewController: UIViewController){
         vcToDisplay = viewController
         vcToDisplay?.presentationController?.delegate = self
+        if let scrollableVC = vcToDisplay as? BlurredScrollableModalView{
+            scrollingVC = scrollableVC
+        }
     }
     
     func blur(alpha: CGFloat = 1, dismiss: Bool = false, duration: TimeInterval? = nil, completion: ((Bool) ->Void)? = nil){
@@ -52,6 +56,13 @@ public class BlurredModalViewController: UIViewController, UIAdaptivePresentatio
     }
     
     public func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
+        
+        if let scrollingVC = scrollingVC{
+            if !scrollingVC.canDismiss(){
+                return false
+            }
+        }
+        
         hasDismissed = false
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
             if !self.hasDismissed{

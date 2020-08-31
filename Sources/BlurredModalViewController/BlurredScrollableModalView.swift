@@ -9,9 +9,9 @@ import UIKit
 
 public protocol BlurredScrollableModalView {
     
-    func canDismiss() ->Bool;
+    func canDismiss()->Bool;
     
-    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView);
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView);
     
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool);
+    func scrollViewWillEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool);
 }
